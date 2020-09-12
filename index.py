@@ -1,16 +1,26 @@
-from flask import Flask, url_for, request
+from flask import Flask, url_for, request, render_template
 from markupsafe import escape
 
 app = Flask(__name__)
 
-# main routing
+'''
+MAIN ROUTING:
+
+app.route is where you will create new pages.
+use render_template to load different .html files. 
+'''
+
 @app.route('/')
-def title_one():
-    return 'SCRAPISM v1.0'
+def begin():
+    return 'Begin Flask App'
 
 @app.route('/about')
 def about():
-    return 'Scrapism is a BS4 web scraper for finding business website contact/support information.'
+    return render_template('about.html')    
+
+@app.route('/home')
+def home():
+    return render_template('home.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -42,6 +52,7 @@ def show_subpath(subpath):
 # path reversal -- for easy changing of functions
 with app.test_request_context():
     print(url_for('about'))
+    print(url_for('home'))
     print(url_for('login'))
     print(url_for('login', next='/'))
     print(url_for('get_github'))
@@ -51,3 +62,6 @@ with app.test_request_context():
     
     print(url_for('show_post', post_id='1'))
     print(url_for('profile', username='John Doe'))
+
+if __name__ == '__main__':
+    app.run(debug = True)
